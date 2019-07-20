@@ -1,0 +1,24 @@
+**/*.log
+**/*.suo
+**/.vs
+**/*.csproj.user
+/.tscache
+/dts/**/*.*
+!/dts/typings-import.json
+/typings
+/obj/Debug
+
+!/packages/**/*.targets
+!/packages/**/*.props
+/**/.tscache/*
+**/quality
+
+# ignore distribution directories
+dist/
+
+# ignore node modules
+node_modules/
+
+# ignore package-lock files for individual packages
+/**/*/package-lock.json
+

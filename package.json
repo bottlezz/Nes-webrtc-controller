@@ -4,7 +4,8 @@
   "description": "hackathon!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./node_modules/.bin/http-server -a localhost -p 8000 -c-1"
   },
   "repository": {
     "type": "git",
@@ -18,5 +19,10 @@
   "bugs": {
     "url": "https://github.com/bottlezz/Nes-webrtc-controller/issues"
   },
-  "homepage": "https://github.com/bottlezz/Nes-webrtc-controller"
+  "homepage": "https://github.com/bottlezz/Nes-webrtc-controller",
+  "dependencies": {
+    "http-server": "^0.11.1",
+    "jsnes": "^1.1.0",
+    "peerjs": "^1.0.1"
+  }
 }
