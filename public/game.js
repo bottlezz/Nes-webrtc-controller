@@ -80,6 +80,7 @@ function keyboard(callback, event){
 }
 
 function onKeyPad(palyerId, key, upDown){
+    console.log(palyerId + " " + key +" "+ upDown);
     var keycode=null;
     switch(key){
         case 1:
@@ -109,7 +110,7 @@ function onKeyPad(palyerId, key, upDown){
         default:
             break;
     }
-}
+};
 
 function nes_init(canvas_id){
 	var canvas = document.getElementById(canvas_id);

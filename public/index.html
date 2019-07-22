@@ -4,21 +4,57 @@
         <title>Example</title>
         <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
         <script>
-            var peer = new Peer(); 
-            
-            var conn = peer.connect('another-peers-id');
-            // on open will be launch when you successfully connect to PeerServer
-            conn.on('open', function(){
-                // here you have conn.id
-                conn.send('hi!');
+            var peer = null; // own peer object
+            var conn = null;
+            var connections = {};
+            peer = new Peer(null, {
+                debug: 2
+            });
+            console.log(peer.id);
+            peer.on('open', function (id) {
+                // Workaround for peer.reconnect deleting previous id
+                if (peer.id === null) {
+                    console.log('Received null id from peer open');
+                } 
+                console.log('ID: ' + peer.id);
+            });
+            peer.on('disconnected', function () {
+                console.log('Connection lost. Please reconnect');
+                // Workaround for peer.reconnect deleting previous id
+                peer.id = lastPeerId;
+                peer._lastServerId = lastPeerId;
+                peer.reconnect();
+            });
+            peer.on('connection', function (c) {
+                if (!connections[c.peer]) {
+
+                }
+                connections[c.peer] = c;
+                console.log("Connected to: " + c.peer);
+                status.innerHTML = "Connected"
+                ready(connections[c.peer]);
             });
 
-            peer.on('connection', function(conn) {
-                conn.on('data', function(data){
-                    // Will print 'hi!'
-                    console.log(data);
-                });
+            peer.on('close', function() {
+                conn = null;
+                console.log('Connection destroyed');
             });
+            peer.on('error', function (err) {
+                console.log(err);
+            });
+            function ready(conn) {
+                conn.on('data', function (data) {
+                    onKeyPad(1,7,0);
+                    
+                    setTimeout(function(){onKeyPad(1,7,1);}, 500);
+                    
+                });
+                    conn.on('close', function () {
+                        status.innerHTML = "Connection reset<br>Awaiting connection...";
+                        conn = null;
+                        start(true);
+                    });
+                }
         </script>
         <script type="text/javascript" src="jsnes.js"></script>
         <script type="text/javascript" src="game.js"></script>
