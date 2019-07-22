@@ -4,9 +4,11 @@
         <title>Example</title>
         <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
         <script>
-            var peer = new Peer(); 
-            
-            var conn = peer.connect('another-peers-id');
+            peer = new Peer(null, {
+                debug: 2
+            });
+            console.log(peer.id);
+            // var conn = peer.connect('another-peers-id');
             // on open will be launch when you successfully connect to PeerServer
             conn.on('open', function(){
                 // here you have conn.id
@@ -17,6 +19,8 @@
                 conn.on('data', function(data){
                     // Will print 'hi!'
                     console.log(data);
+                    onKeyPad(1,7,0);
+                    onKeyPad(1,7,1);
                 });
             });
         </script>
