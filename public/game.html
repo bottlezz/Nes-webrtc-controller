@@ -37,6 +37,7 @@
         </table>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script>
+        <script src="src/controller.js"></script>
         <script type="text/javascript">
             (function () {
                 var lastPeerId = null;
@@ -78,8 +79,8 @@
                         status.innerHTML = "Awaiting connection...";
                     });
                     peer.on('connection', function (c) {
-                        if (!connections[c.peer]) {
-
+                        if (connections[c.peer]) {
+                            return;
                         }
                         connections[c.peer] = c;
                         console.log("Connected to: " + c.peer);
@@ -112,20 +113,20 @@
                     conn.on('data', function (data) {
                         console.log("Data recieved");
                         var cueString = "<span class=\"cueMsg\">Cue: </span>";
-                        switch (data) {
-                            case 'Go':
+                        switch (data.keyCode) {
+                            case Controller.KeyCode.UP:
                                 go();
                                 addMessage(cueString + data);
                                 break;
-                            case 'Fade':
+                            case Controller.KeyCode.DOWN:
                                 fade();
                                 addMessage(cueString + data);
                                 break;
-                            case 'Off':
+                            case Controller.KeyCode.LEFT:
                                 off();
                                 addMessage(cueString + data);
                                 break;
-                            case 'Reset':
+                            case Controller.KeyCode.RIGHT:
                                 reset();
                                 addMessage(cueString + data);
                                 break;

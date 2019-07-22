@@ -20,11 +20,6 @@
                     <input type="text" id="receiver-id" title="Input the ID from receive.html">
                     <button id="connect-button">Connect</button>
                 </td>
-                <td>
-                    <input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />
-                    <button type="button" id="sendButton">Send</button>
-                    <button type="button" id="clearMsgsButton">Clear Msgs (Local)</button>
-                </td>
             </tr>
             <tr>
                 <td><div id="status" class="status"></div></td>
@@ -32,24 +27,25 @@
             </tr>
             <tr>
                 <td>
-                    <button type="button" class="control-button" id="resetButton">Reset</button>
+                    <button type="button" class="control-button" id="resetButton">RIGHT</button>
                 </td>
                 <td>
-                    <button type="button" class="control-button" id="goButton">Go</button>
+                    <button type="button" class="control-button" id="goButton">UP</button>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <button type="button" class="control-button" id="fadeButton">Fade</button>
+                    <button type="button" class="control-button" id="fadeButton">DOWN</button>
                 </td>
                 <td>
-                    <button type="button" class="control-button" id="offButton">Off</button>
+                    <button type="button" class="control-button" id="offButton">LEFT</button>
                 </td>
             </tr>
         </table>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script>
         <script src="src/player.js"></script>
+        <script src="src/controller.js"></script>
         <script type="text/javascript">
             (function () {
                 var player = null;
@@ -79,36 +75,16 @@
                     player.join(recvIdInput.value);
                 }
                 goButton.onclick = function () {
-                    player.sendCommand("Go");
+                    player.sendCommand(Controller.KeyCode.UP, false);
                 };
                 resetButton.onclick = function () {
-                    player.sendCommand("Reset");
+                    player.sendCommand(Controller.KeyCode.RIGHT, false);
                 };
                 fadeButton.onclick = function () {
-                    player.sendCommand("Fade");                  
+                    player.sendCommand(Controller.KeyCode.DOWN, false);                  
                 };
                 offButton.onclick = function () {
-                    player.sendCommand("Off");  
-                };
-                function addMessage(msg) {
-                    var now = new Date();
-                    var h = now.getHours();
-                    var m = addZero(now.getMinutes());
-                    var s = addZero(now.getSeconds());
-                    if (h > 12)
-                        h -= 12;
-                    else if (h === 0)
-                        h = 12;
-                    function addZero(t) {
-                        if (t < 10)
-                            t = "0" + t;
-                        return t;
-                    };
-                    message.innerHTML = "<br><span class=\"msg-time\">" + h + ":" + m + ":" + s + "</span>  -  " + msg + message.innerHTML;
-                };
-                function clearMessages() {
-                    message.innerHTML = "";
-                    addMessage("Msgs cleared");
+                    player.sendCommand(Controller.KeyCode.LEFT, false);   
                 };
                 // Listen for enter in message box
                 sendMessageBox.onkeypress = function (e) {
@@ -127,10 +103,7 @@
                         addMessage("<span class=\"selfMsg\">Self: </span> " + msg);
                     }
                 };
-                // Clear messages box
-                clearMsgsButton.onclick = function () {
-                    clearMessages();
-                };
+
                 // Start peer connection on click
                 connectButton.addEventListener('click', join);
                 // Since all our callbacks are setup, start the process of obtaining an ID

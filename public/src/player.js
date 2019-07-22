@@ -53,8 +53,7 @@ function Player () {
             reliable: true
         });
         conn.on('open', function () {
-            // status.innerHTML = "Connected to: " + conn.peer;
-            console.log("Connected to: " + conn.peer);
+            log("Connected");
             // Check URL params for comamnds that should be sent immediately
             var command = getUrlParam("command");
             if (command)
@@ -65,7 +64,7 @@ function Player () {
             // addMessage("<span class=\"peerMsg\">Peer:</span> " + data);
         });
         conn.on('close', function () {
-            // status.innerHTML = "Connection closed";
+            log("Disconnected");
         });
     };
     /**
@@ -88,13 +87,23 @@ function Player () {
      * Send a signal via the peer connection and add it to the log.
      * This will only occur if the connection is still alive.
      */
-    function signal(sigName) {
+    function signal(keyCode, isKeyDown) {
         if (conn.open) {
-            conn.send(sigName);
-            console.log(sigName + " signal sent");
+            // create message
+            var data = {
+                playerId: conn.peer,
+                keyCode: keyCode,
+                isKeyDown: isKeyDown === true
+            }
+            conn.send(data);
+            log("Message Sent");
         }
     }
     
+    function log(msg) {
+        console.log(conn.peer + ": " + msg);
+    }
+
     return {
         init: initialize,
         join: join,
