@@ -15,7 +15,9 @@
                 // Workaround for peer.reconnect deleting previous id
                 if (peer.id === null) {
                     console.log('Received null id from peer open');
-                } 
+                }
+                var connectionId = document.getElementById("receiver-id");
+                connectionId.innerHTML = "Connection ID: " + peer.id;
                 console.log('Connection ID: ' + peer.id);
             });
             peer.on('disconnected', function () {
@@ -60,7 +62,8 @@
     <body>
         <div style="margin: auto; width: 75%;">
 			<canvas id="nes-canvas" width="256" height="240" style="width: 80%"/>
-		</div>
+        </div>
+        <div id="receiver-id" style="font-weight: bold;" title="Copy this ID to the input on send.html."></div>
 		<p>DPad: Arrow keys<br/>Start: Return, Select: Tab<br/>A Button: A, B Button: S</p>
     </body>
 </html>
