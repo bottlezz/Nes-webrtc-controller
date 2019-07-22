@@ -20,8 +20,14 @@
                 });
             });
         </script>
+        <script type="text/javascript" src="jsnes.js"></script>
+        <script type="text/javascript" src="game.js"></script>
+        <script>window.onload = function(){nes_load_url("nes-canvas", "contra.nes");}</script>
     </head>
     <body>
-        <p>This is an example of a simple HTML page with one paragraph.</p>
+        <div style="margin: auto; width: 75%;">
+			<canvas id="nes-canvas" width="256" height="240" style="width: 80%"/>
+		</div>
+		<p>DPad: Arrow keys<br/>Start: Return, Select: Tab<br/>A Button: A, B Button: S</p>
     </body>
 </html>
