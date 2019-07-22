@@ -1,5 +1,6 @@
-function Player () {
+function Player (id) {
 
+    var id = id;
     var lastPeerId = null;
     var peer = null; // own peer object
     var conn = null;
@@ -83,17 +84,14 @@ function Player () {
         else
             return results[1];
     };
-    /**
-     * Send a signal via the peer connection and add it to the log.
-     * This will only occur if the connection is still alive.
-     */
-    function signal(keyCode, isKeyDown) {
+
+    function controllerSignal(controllerCode, isPressed) {
         if (conn.open) {
             // create message
             var data = {
-                playerId: conn.peer,
-                keyCode: keyCode,
-                isKeyDown: isKeyDown === true
+                playerId: id,
+                controllerCode: controllerCode,
+                isPressed: isPressed
             }
             conn.send(data);
             log("Message Sent");
@@ -107,6 +105,6 @@ function Player () {
     return {
         init: initialize,
         join: join,
-        sendCommand: signal
+        sendCommand: controllerSignal
     }
 };

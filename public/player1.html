@@ -41,11 +41,19 @@
                     <button type="button" class="control-button" id="offButton">LEFT</button>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <button type="button" class="control-button" id="selectButton">SELECT</button>
+                </td>
+                <td>
+                    <button type="button" class="control-button" id="AButton">A</button>
+                </td>
+            </tr>
         </table>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script>
-        <script src="src/player.js"></script>
-        <script src="src/controller.js"></script>
+        <script src="lib/player.js"></script>
+        <script src="lib/controller.js"></script>
         <script type="text/javascript">
             (function () {
                 var player = null;
@@ -53,6 +61,7 @@
                 var status = document.getElementById("status");
                 var message = document.getElementById("message");
                 var goButton = document.getElementById("goButton");
+                var selectButton = document.getElementById("selectButton");
                 var resetButton = document.getElementById("resetButton");
                 var fadeButton = document.getElementById("fadeButton");
                 var offButton = document.getElementById("offButton");
@@ -68,44 +77,45 @@
                  * peer object.
                  */
                 function initialize() {
-                    player = new Player();
+                    player = new Player(1);
                     player.init();
+                    window.player = player;
                 };
                 function join() {
                     player.join(recvIdInput.value);
                 }
                 goButton.onclick = function () {
-                    player.sendCommand(Controller.KeyCode.UP, false);
+                    player.sendCommand(Controller.KeyCode.UP, true);
                 };
                 resetButton.onclick = function () {
-                    player.sendCommand(Controller.KeyCode.RIGHT, false);
+                    player.sendCommand(Controller.KeyCode.RIGHT, true);
                 };
                 fadeButton.onclick = function () {
-                    player.sendCommand(Controller.KeyCode.DOWN, false);                  
+                    player.sendCommand(Controller.KeyCode.DOWN, true);                  
                 };
                 offButton.onclick = function () {
-                    player.sendCommand(Controller.KeyCode.LEFT, false);   
+                    player.sendCommand(Controller.KeyCode.LEFT, true);   
                 };
-                // Listen for enter in message box
-                sendMessageBox.onkeypress = function (e) {
-                    var event = e || window.event;
-                    var char = event.which || event.keyCode;
-                    if (char == '13')
-                        sendButton.click();
-                };
-                // Send message
-                sendButton.onclick = function () {
-                    if (conn.open) {
-                        var msg = sendMessageBox.value;
-                        sendMessageBox.value = "";
-                        conn.send(msg);
-                        console.log("Sent: " + msg);
-                        addMessage("<span class=\"selfMsg\">Self: </span> " + msg);
-                    }
+                selectButton.onclick = function () {
+                    player.sendCommand(Controller.KeyCode.SELECT, false);
+                    setTimeout(function(){ player.sendCommand(Controller.KeyCode.SELECT, true);}, 500);
                 };
 
                 // Start peer connection on click
                 connectButton.addEventListener('click', join);
+
+                // document.onkeydown = function (e) {
+                //     if (player && e.code === "KeyA") {
+                //     console.log("Down: " + e.code);
+                //     player.sendCommand(Controller.KeyCode.SELECT, true);
+                //     }
+                // }
+                // document.onkeyup = function (e) {
+                //     if (player && e.code === "KeyA") {
+                //     console.log("Up: " + e.code);
+                //     player.sendCommand(Controller.KeyCode.SELECT, false);
+                //     }
+                // }
                 // Since all our callbacks are setup, start the process of obtaining an ID
                 initialize();
             })();
