@@ -75,10 +75,12 @@ function touchOnCallBack(x,y){
 	}
 	ctrlStatus=1;
 	updateAnalogStickPosition(currentRot);
+	getButton(rot);
 }
 function touchUpCallBack(x,y){
     console.log(currentRot);
 	ctrlStatus=2;
+	getButton(currentRot);
 }
 
 function orientationChange(){
@@ -103,6 +105,13 @@ function resetAnalogStickPosition(){
 	$('#analogStick').offset({left:ctrlPadDeltaX- analogStickWidth/2, top:ctrlPadDeltaY- analogStickWidth/2});
 	//$('#analogStick').top();
 }
+
+var player = null;
+function initialize() {
+	player = new Player(1);
+	player.init();
+};
+
 /*
 */
 var go=setInterval(function(){
@@ -137,7 +146,9 @@ function getButton(rot)
     //top down left right
     
     if((rot<=-30 && rot>=-27) || (rot>=27 && rot <=30)){
-        //up
+		//up
+		player.sendCommand(Controller.KeyCode.UP, true);
+		console.log("UP");
         
     }else if(rot>=19 && rot <=26){
         //up right
@@ -156,7 +167,7 @@ function getButton(rot)
     }
 }
 
-getPressAndRelease(newDirection, currentDirection){
+function getPressAndRelease(newDirection, currentDirection) {
     var press = [0,0,0,0];
     var relese = [0,0,0,0];
     for(let i = 0; i < 4 ; i++){
