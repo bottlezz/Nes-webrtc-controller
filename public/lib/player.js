@@ -95,6 +95,7 @@ function Player (id) {
             }
             conn.send(data);
             log("Message Sent");
+            console.log(data);
         }
     }
     

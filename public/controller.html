@@ -4,7 +4,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
 	<meta name=apple-mobile-web-app-capable content=yes>
 	<meta name=apple-mobile-web-app-status-bar-style content=black>
-	<link rel="stylesheet" type="text/css" href="ctrl.css">
+    <link rel="stylesheet" type="text/css" href="ctrl.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script>
+    
 	<script type="text/javascript" src="lib/controller.js"></script>
 	<script type="text/javascript" src="lib/player.js"></script>
 	<script type="text/javascript" src="roundController.js"></script>
@@ -22,7 +24,7 @@
 	<div class = "txtBlock">
 	</div>
 	<div id="controlPannel">
-
+       
 		<div class="ctrlPadl" id="ctrl1">
 			<div class="buttonBase">
 				
@@ -31,6 +33,7 @@
 			</div>
 		</div>
 		<div class="ctrlPadr" id='ctrl2'>
+                <div><input type="textbox" id="recvId"><button id="join">join</button></div>
             <div>
             <div class="button start"></div>
             <div class="button select"></div>
