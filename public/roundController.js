@@ -42,7 +42,7 @@ function ControlPad(id,callBack,endCallBack){
     //orignx and origny is the center of div
     var x=x-orignx;
     var y=y-origny;
-    return Math.round(Math.atan2(x, y)*57.3/6/30*32);
+    return Math.round(Math.atan2(x, y)*57.3/6);
   }
   
   
