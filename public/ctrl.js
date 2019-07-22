@@ -6,9 +6,12 @@ mql.addListener(function(m) {
 	orientationChange();
 });
 var player = null;
+var controller = null;
 function initialize() {
 	player = new Player(1);
-	player.init();
+    player.init();
+    controller = new Controller($(".select")[0], $(".start")[0], $(".buttonA")[0], $(".buttonB")[0]);
+    controller.assign(player);
 };
 initialize();
 
@@ -248,5 +251,5 @@ function releaseAll(callBack)
 $(".start").click(function(){
     player.sendCommand(Controller.KeyCode.START, false);
     setTimeout(function(){ player.sendCommand(Controller.KeyCode.START, true);}, 100);
-
 })
+

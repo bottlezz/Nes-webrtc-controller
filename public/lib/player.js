@@ -68,12 +68,11 @@ function Player (id) {
             log("Disconnected");
         });
     };
-    /**
-     * Get first "GET style" parameter from href.
-     * This enables delivering an initial command upon page load.
-     *
-     * Would have been easier to use location.hash.
-     */
+    
+    function isConnected() {
+        return (conn && conn.open);
+    }
+
     function getUrlParam(name) {
         name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
         var regexS = "[\\?&]" + name + "=([^&#]*)";
@@ -106,6 +105,7 @@ function Player (id) {
     return {
         init: initialize,
         join: join,
-        sendCommand: controllerSignal
+        sendCommand: controllerSignal,
+        isConnected: isConnected
     }
 };
