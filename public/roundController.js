@@ -7,6 +7,7 @@ function ControlPad(id,callBack,endCallBack){
     var self=this;
     pad.addEventListener('touchmove', function(event) {
       event.preventDefault();
+      event.stopImmediatePropagation();
       var touch = event.targetTouches[0];
       self.x = touch.pageX -padCord.x;
       self.y = touch.pageY -padCord.y;
@@ -16,6 +17,7 @@ function ControlPad(id,callBack,endCallBack){
     }, false);
     pad.addEventListener('touchstart', function(event) {
       event.preventDefault();
+      event.stopImmediatePropagation();
       var touch = event.targetTouches[0];
       self.x = touch.pageX -padCord.x;
       self.y = touch.pageY -padCord.y;
@@ -25,7 +27,7 @@ function ControlPad(id,callBack,endCallBack){
   
     pad.addEventListener('touchend', function(event) {
       event.preventDefault();
-      console.log("end");
+      event.stopImmediatePropagation();
       endCallBack(self.x,self.y);
     }, false);
   
