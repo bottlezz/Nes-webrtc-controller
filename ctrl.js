@@ -45,6 +45,12 @@ function initialize() {
         var pid=$("#recvId").val();
         console.log(pid);
         player.join(pid);
+        setTimeout(function(){
+            if(player.isConnected()){
+                $("#status").text("Connected");
+                
+            }
+        },1000)
     }
 
 
