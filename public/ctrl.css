@@ -2,56 +2,71 @@ body{
 	overflow: hidden;
 	margin:0px;
 	padding:0px;
-}
-.ctrlPad{
-	margin:5px;
-	width: 48%;
-	height: 200px;
-	border: 3px solid;
-	border-color: #555555;
+	background-image: url("background.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 
-.ctrlPadl {
-	margin:0px;
-	width: 48%;
-	height: 90%;
-	border: 0px solid;
+.controlPanel
+{
+	grid-template-columns: 35% auto 45%;
+    grid-gap: 10px;
+    grid-template-rows: 100%;
+    /* grid-auto-rows: minmax(100px, auto); */
+    display: grid;
+}
+
+.joyStickPanel {
+	grid-column: 1;
+    grid-row: 1;
 	border-color: #555555;
 	float:left;
-	
 	background-size: 100%;
 	position:relative;
-
 }
-.ctrlPadr {
-	margin:0px;
 
-	width: 48%;
-
-	height: 90%;
-	border: 1px solid;
-	border-color: #555555;
-	float:right;
-	position:relative;
-
+.centerPanel {
+	grid-column: 2;
 }
+
+.cernterPanel .start
+{
+	width: 70%;
+	height:20px;
+	margin: 20 auto ;
+	background-image: url("Start.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+.cernterPanel .select
+{
+	width: 70%;
+	height:20px;
+	margin: auto;
+	background-image: url("Select.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+.rightPanel {
+	grid-column: 3;
+	margin-left: auto;
+}
+
 .buttonBase{
-	width: 75%;
-	
+	width: 80%;
 	margin: 0, auto;
 	background-image: url("aSBgImg.png");
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;
-	position:absolute; 
 	bottom:0;
 }
-.buttonBase-right{
-	right:0;
-}
+
 .analogStick{
 	width: 30%;
-	position: relative;
 }
 
 .button{
@@ -59,9 +74,18 @@ body{
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;
+	font-style: italic;
+    text-align: right;
+    font-weight: bolder;
 }
 
-.ctrlPadr .button{
+.buttonContainer{
+	position: fixed;
+    bottom: 0;
+    right: 0;
+}
+
+.rightPanel .button{
     width: 100px;
     height: 100px;
     margin: 10px;

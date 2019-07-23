@@ -20,8 +20,8 @@ function Controller (select, start, A, B) {
 
     function registerButtons () {
         
-        buttons.button_select.onclick = function () { buttonHandler(Controller.KeyCode.SELECT); }
-        buttons.button_start.onclick = function () { buttonHandler(Controller.KeyCode.START); }
+        buttons.button_select.onclick = function () { buttonHandler(Controller.KeyCode.SELECT); console.log("select");}
+        buttons.button_start.onclick = function () { buttonHandler(Controller.KeyCode.START); console.log("start");}
         //buttons.button_a.onclick = function () { buttonHandler(Controller.KeyCode.A); }
         //buttons.button_b.onclick = function () { buttonHandler(Controller.KeyCode.B); }
         buttons.button_a.addEventListener('touchstart', function(e) {

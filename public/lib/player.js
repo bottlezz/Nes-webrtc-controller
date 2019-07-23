@@ -86,7 +86,7 @@ function Player (id) {
     };
 
     function controllerSignal(controllerCode, isPressed) {
-        if (conn.open) {
+        if (conn && conn.open) {
             // create message
             var data = {
                 playerId: id,
@@ -96,6 +96,8 @@ function Player (id) {
             conn.send(data);
             log("Message Sent");
             console.log(data);
+        } else{
+            console.log("connection is not up yet");
         }
     }
     
