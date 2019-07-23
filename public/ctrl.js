@@ -12,6 +12,10 @@ function initialize() {
     player.init();
     controller = new Controller($(".select")[0], $(".start")[0], $(".buttonA")[0], $(".buttonB")[0]);
     controller.assign(player);
+    var pid = getPeerId();
+    if( pid){
+        player.join(pid);
+    }
 };
 initialize();
 
@@ -95,7 +99,8 @@ function touchOnCallBack(x,y){
 }
 function touchUpCallBack(x,y){
 	ctrlStatus=2;
-	getButton(currentRot);
+    //getButton(currentRot);
+    releaseAll(player.sendCommand);
 }
 
 function orientationChange(){
@@ -151,6 +156,16 @@ var go=setInterval(function(){
 	}
 },20);
 
+var directionList=[
+    [1,0,0,0],
+    [1,0,0,1],
+    [0,0,0,1],
+    [0,1,0,1],
+    [0,1,0,0],
+    [0,1,1,0],
+    [0,0,1,0],
+    [1,0,1,0]
+]
 function getButton(rot)
 {
     //top down left right
@@ -161,32 +176,50 @@ function getButton(rot)
         handleRelease(directionChange.release, player.sendCommand);
 		
     }
-    if((rot<=-30 && rot>=-27) || (rot>=27 && rot <=30)){
+    //console.log(rot);
+    if((rot<=-30 && rot>=-27) || (rot>=27 && rot <=30) && currentDirection!=directionList[0]){
         //up
-        updateAndSend([1,0,0,0]);
-    }else if(rot>=19 && rot <=26){
+
+        console.log("up");
+        updateAndSend(directionList[0]);
+    }else if(rot>=19 && rot <=26 && currentDirection!=directionList[1]){
         //up right
-        updateAndSend([1,0,0,1]);
-    }else if(rot>= 12 && rot <=18){
+        updateAndSend(directionList[1]);
+        console.log("up right");
+
+    }else if(rot>= 12 && rot <=18 && currentDirection!=directionList[2]){
         //right
-        updateAndSend([0,0,0,1]);
-    }else if(rot>= 4 && rot<=11){
+        updateAndSend(directionList[2]);
+        console.log("right");
+
+    }else if(rot>= 4 && rot<=11 && currentDirection!=directionList[3]){
         //right down
-        updateAndSend([0,1,0,1]);
-    }else if((rot>=-3 && rot<=3)){
+        updateAndSend(directionList[3]);
+        console.log("right down");
+
+    }else if((rot>=-3 && rot<=3) && currentDirection!=directionList[4]){
         //down
-        updateAndSend([0,1,0,0]);
-    }else if((rot<=-4 && rot>=-11)){
+        
+        updateAndSend(directionList[4]);
+        console.log("down");
+
+    }else if((rot<=-4 && rot>=-11) && currentDirection!=directionList[5]){
         //left down;
-        updateAndSend([0,1,1,0]);
-    }else if(rot<=-12&& rot>=-18){
+        updateAndSend(directionList[5]);
+        console.log("left down");
+
+    }else if(rot<=-12&& rot>=-18 && currentDirection!=directionList[6]){
         //left
-        updateAndSend([0,0,1,0]);
-    }else if(rot<=-19 && rot>=-26){
+        updateAndSend(directionList[6]);
+        console.log("left");
+
+    }else if(rot<=-19 && rot>=-26 && currentDirection!=directionList[7]){
         // left up
-        updateAndSend([1,0,1,0]);
+        updateAndSend(directionList[7]);
+        console.log("left up");
+
     }else{
-        releaseAll(player.sendCommand);
+        //releaseAll(player.sendCommand);
     }
 }
 
@@ -209,7 +242,7 @@ function handlePress(direction, callBack){
 
     if(direction[0]){
         callBack(Controller.KeyCode.UP, false);
-        console.log(direction);
+        //console.log(direction);
     }
     if(direction[1]){
 		callBack(Controller.KeyCode.DOWN, false);
@@ -227,7 +260,7 @@ function handleRelease(direction, callBack){
 
     if(direction[0]){
         callBack(Controller.KeyCode.UP,true);
-        console.log(direction);
+        //console.log(direction);
     }
     if(direction[1]){
 		callBack(Controller.KeyCode.DOWN, true);
@@ -246,10 +279,22 @@ function releaseAll(callBack)
     callBack(Controller.KeyCode.LEFT, true);
     callBack(Controller.KeyCode.DOWN, true);
     callBack(Controller.KeyCode.UP,true);
+    currentDirection=[0,0,0,0];
 }
 
-$(".start").click(function(){
-    player.sendCommand(Controller.KeyCode.START, false);
-    setTimeout(function(){ player.sendCommand(Controller.KeyCode.START, true);}, 100);
-})
+function getUrlVars()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
 
+function getPeerId(){
+    return getUrlVars()["peerId"];
+}
