@@ -17,7 +17,7 @@
                     player2Msg = document.getElementById("player-two-message");
                     player1QR = document.getElementById("player-one-qrcode");
                     player2QR = document.getElementById("player-two-qrcode");
-                    host = new Host(onConnectionOpen);
+                    host = new Host(onConnectionOpen, onConnectionReady);
                     host.start();
                 }
                 function refreshConnection() {
@@ -34,12 +34,17 @@
                     showQRCodeForPlayers(connId);
                 }
                 function onConnectionReady(conn) {
-                    conn.on('data', function (data) {
-                        onKeyPad(data.playerId, data.controllerCode, data.isPressed === true ? 1 : 0);
-                    });
-                    conn.on('close', function () {
-                        // start(true);
-                    });
+                    if (conn) {
+                        if (conn.options.metadata) {
+                            addMessage(conn.options.metadata.playerIndex, "Connected");
+                        }
+                        conn.on('data', function (data) {
+                            onKeyPad(data.playerId, data.controllerCode, data.isPressed === true ? 1 : 0);
+                        });
+                        conn.on('close', function () {
+                            // start(true);
+                        });
+                    }
                 }
                 function showQRCodeForPlayers(connId) {
                     if (connId) {
@@ -72,6 +77,11 @@
                         panel.innerHTML = "<br><span class=\"msg-time\">" + h + ":" + m + ":" + s + "</span>  -  " + msg + panel.innerHTML;
                     }
                 }
+                function loadPlayerController(elmt) {
+                    if (elmt && elmt.title) {
+                        window.open(elmt.title, '_blank');
+                    }
+                }
             </script>
 
         <script type="text/javascript" src="lib/jsnes.js"></script>
@@ -82,13 +92,13 @@
     <body>
             <header>
               <h2>Hack 2019</h2>
-              <div id="receiver-id" style="font-weight: bold;" onclick="refreshConnection()"></div>
+              <div id="receiver-id" style="font-weight: bold;" ondblclick="refreshConnection()"></div>
             </header>
             
             <section>
                 <div class="player-panel left">
                     <h4>Player #1</h4>
-                    <div id="player-one-qrcode" class="player-qrcode"></div>
+                    <div id="player-one-qrcode" class="player-qrcode" ondblclick="loadPlayerController(this)"></div>
                     <div id="player-one-message" class="player-msg-panel">
                     </div>
                 </div>
@@ -98,7 +108,7 @@
                 </div>
                 <div class="player-panel right">
                     <h4>Player #2</h4>
-                    <div id="player-two-qrcode" class="player-qrcode"></div>
+                    <div id="player-two-qrcode" class="player-qrcode" ondblclick="loadPlayerController(this)"></div>
                     <div id="player-two-message" class="player-msg-panel">
                         
                     </div>
