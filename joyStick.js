@@ -1,4 +1,4 @@
-function ControlPad(id,touchStartcallBack,touchEndCallBack, handlePress, handleRelease)
+function JoyStick(id,touchStartcallBack,touchEndCallBack, handlePress, handleRelease)
 {
   var pad=document.getElementById(id);
   var padCord=getPosition(pad);
@@ -26,7 +26,6 @@ function ControlPad(id,touchStartcallBack,touchEndCallBack, handlePress, handleR
     [0,0,1,0],
     [1,0,1,0]
   ];
-
   
   var cw = $('.buttonBase').width();
   $('.buttonBase').css({'height':cw+'px'});
@@ -157,6 +156,19 @@ function ControlPad(id,touchStartcallBack,touchEndCallBack, handlePress, handleR
     return Math.round(Math.atan2(x, y)*57.3/6);
   }
   
+  function getPressAndRelease(newDirection, currentDirection) {
+    var press = [0,0,0,0];
+    var release = [0,0,0,0];
+    for(let i = 0; i < 4 ; i++){
+        if(newDirection[i]==1 && currentDirection[i]==0){
+            press[i] = 1;
+        }
+        if(newDirection[i]==0 && currentDirection[i]==1){
+            release[i] = 1;
+        }
+    }
+    return {press, release};
+  }
 
   var go=setInterval(function(){
     switch(ctrlStatus){
@@ -182,21 +194,4 @@ function ControlPad(id,touchStartcallBack,touchEndCallBack, handlePress, handleR
       break;
     }
   },20);
-  
 };
-  
-  
-  function toggleFullScreen() {
-    var doc = window.document;
-    var docEl = doc.documentElement;
-  
-    var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-    var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-  
-    if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-      requestFullScreen.call(docEl);
-    }
-    else {
-      cancelFullScreen.call(doc);
-    }
-  }

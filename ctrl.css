@@ -13,7 +13,7 @@ body{
     display: grid;
 }
 
-.ctrlPadl {
+.joyStickPanel {
 	grid-column: 1;
     grid-row: 1;
 	border-color: #555555;
@@ -23,11 +23,11 @@ body{
 	position:relative;
 
 }
-.center {
+.centerPanel {
 	grid-column: 2;
 }
 
-.ctrlPadr {
+.rightPanel {
 	grid-column: 3;
 }
 .buttonBase{
@@ -52,7 +52,7 @@ body{
 	background-position: center center;
 }
 
-.ctrlPadr .button{
+.rightPanel .button{
     width: 100px;
     height: 100px;
     margin: 10px;
