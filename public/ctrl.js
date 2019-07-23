@@ -21,7 +21,14 @@ function getUrlParams () {
 }
 function initialize() {
     var params = getUrlParams();
-	player = new Player(parseInt(params.player));
+    var playerNumber = 1;
+    try {
+        playerNumber = parseInt(params.player);
+    } catch {
+        playerNumber = 1;
+    }
+
+	player = new Player(playerNumber);
     player.init();
     controller = new Controller($(".select")[0], $(".start")[0], $(".buttonA")[0], $(".buttonB")[0]);
     controller.assign(player);

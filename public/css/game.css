@@ -51,7 +51,7 @@ canvas {
   
 section {
     position: relative;
-    min-width: 1200px;
+    min-width: 1280px;
 }
 
 section:after {
@@ -66,6 +66,33 @@ section:after {
     margin: auto;
     margin-left: auto;
     margin-right: auto;
+}
+
+.player-msg-panel {
+    height: 200px;
+    max-height: 200px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background: #fff;
+    overflow: auto;
+    font-size: 12px;
+    text-align: left;
+}
+
+.msg-time {
+    color: blue;
+}
+
+.cueMsg {
+    color: orange;
+}
+
+.selfMsg {
+    color: green;
+}
+
+.peerMsg {
+    color: red;
 }
 
 footer {
