@@ -7,8 +7,21 @@ mql.addListener(function(m) {
 });
 var player = null;
 var controller = null;
+
+function getUrlParams () {
+    var params = {};
+    var tmp = [];
+    window.location.search.substr(1).split("&").forEach(function (item) {
+        tmp = item.split("=");
+        if (tmp.length > 1) {
+            params[tmp[0]] = decodeURIComponent(tmp[1]);
+        }
+    });;
+    return params;
+}
 function initialize() {
-	player = new Player(1);
+    var params = getUrlParams();
+	player = new Player(parseInt(params.player));
     player.init();
     controller = new Controller($(".select")[0], $(".start")[0], $(".buttonA")[0], $(".buttonB")[0]);
     controller.assign(player);
