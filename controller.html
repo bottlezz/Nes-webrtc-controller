@@ -4,24 +4,23 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
 	<meta name=apple-mobile-web-app-capable content=yes>
 	<meta name=apple-mobile-web-app-status-bar-style content=black>
-    <link rel="stylesheet" type="text/css" href="ctrl.css">
+    <link rel="stylesheet" type="text/css" href="css/ctrl.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script>
     
 	<script type="text/javascript" src="lib/controller.js"></script>
 	<script type="text/javascript" src="lib/player.js"></script>
-	<script type="text/javascript" src="joyStick.js"></script>
+	<script type="text/javascript" src="lib/joyStick.js"></script>
     <script
     src="https://code.jquery.com/jquery-2.2.4.min.js"
     integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
     crossorigin="anonymous"></script>
+    <script type="text/javascript" src="lib/ctrl.js"></script>
 </head>
 
 <body>
 
 	<div id="view_OrientationCheck" >
 		<h2> Tilt to hrozental plz </h2>
-	</div>
-	<div class = "txtBlock">
 	</div>
 	<div class="controlPanel" id="controlPanel">
        
@@ -42,13 +41,12 @@
         </div>
 		<div class="rightPanel">
             <div><input type="textbox" id="recvId"><button id="join">join</button></div>
-            <div class="buttonContainer">
+            <div class="">
             <div class="button buttonB">B</div>
             <div class="button buttonA">A</div>
             </div>
 		</div>
 		
 	</div>
-    <script type="text/javascript" src="ctrl.js"></script>
 </body>
 </html>

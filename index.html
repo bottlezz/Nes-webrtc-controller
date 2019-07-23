@@ -7,21 +7,65 @@
         <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsnes/1.1.0/jsnes.min.js"></script>        
         <script type="text/javascript" src="lib/controller.js"></script>
+        <script type="text/javascript" src="lib/host.js"></script>
         <link rel="stylesheet" href="./css/game.css">
         <script>
-                var player1Msg;
-                var player2Msg;
-
+                var receiverId, player1Msg, player2Msg, player1QR, player2QR;
+                var hostUrlBase;
+                var peer = null;
                 function init() {
+                    receiverId = document.getElementById("receiver-id");
                     player1Msg = document.getElementById("player-one-message");
                     player2Msg = document.getElementById("player-two-message");
+                    player1QR = document.getElementById("player-one-qrcode");
+                    player2QR = document.getElementById("player-two-qrcode");
+                    host = new Host(onConnectionOpen, onConnectionReady);
+                    host.start();
+
+                    var pathArray = location.pathname.split('/');
+                    if (pathArray.length > 0) {
+                        var lastPath = pathArray[pathArray.length-1];
+                        if (lastPath.indexOf(".") > -1) {
+                            pathArray.pop();
+                        }
+                    }
+                    var paths = pathArray.join('/');
+                    hostUrlBase = location.origin + paths;
                 }
-                function showQRCodeForPlayers() {
-                    var playerurl = location.origin + "/controller.html?";
-                    var playerOneQRcode = new QRCode("player-one-qrcode");
-                    var playerTwoQRcode = new QRCode("player-two-qrcode");
-                    playerOneQRcode.makeCode(playerurl+"player=1");
-                    playerTwoQRcode.makeCode(playerurl+"player=2");
+                function refreshConnection() {
+                    if (host) {
+                        receiverId.innerHTML = "Re-establish the connection...";
+                        player1QR.innerHTML = "";
+                        player2QR.innerHTML = "";
+                        host.refresh();
+                    }
+                }
+                function onConnectionOpen(connId) {
+                    var receiverId = document.getElementById("receiver-id");
+                    receiverId.innerHTML = "Connection ID: " + connId;
+                    showQRCodeForPlayers(connId);
+                }
+                function onConnectionReady(conn) {
+                    if (conn) {
+                        if (conn.options.metadata) {
+                            addMessage(conn.options.metadata.playerIndex, "Connected");
+                        }
+                        conn.on('data', function (data) {
+                            onKeyPad(data.playerId, data.controllerCode, data.isPressed === true ? 1 : 0);
+                        });
+                        conn.on('close', function () {
+                            // start(true);
+                        });
+                    }
+                }
+                function showQRCodeForPlayers(connId) {
+                    if (connId) {
+                        var playerurl = hostUrlBase + "/controller.html?peerid="+connId+"&";
+                        var playerOneQRcode = new QRCode("player-one-qrcode");
+                        var playerTwoQRcode = new QRCode("player-two-qrcode");
+                        playerOneQRcode.makeCode(playerurl+"player=1");
+                        playerTwoQRcode.makeCode(playerurl+"player=2");
+                    }
                 }
                 function addMessage(player, msg) {
                     var panel = null;
@@ -45,57 +89,11 @@
                         panel.innerHTML = "<br><span class=\"msg-time\">" + h + ":" + m + ":" + s + "</span>  -  " + msg + panel.innerHTML;
                     }
                 }
-            </script>
-        <script>
-            (function () {
-
-                var peer = null; // own peer object
-                var conn = null;
-                var connections = {};
-                peer = new Peer(null, {
-                    debug: 2
-                });
-                peer.on('open', function (id) {
-                    // Workaround for peer.reconnect deleting previous id
-                    if (peer.id === null) {
-                        console.log('Received null id from peer open');
+                function loadPlayerController(elmt) {
+                    if (elmt && elmt.title) {
+                        window.open(elmt.title, '_blank');
                     }
-                    var connectionId = document.getElementById("receiver-id");
-                    connectionId.innerHTML = "Connection ID: " + peer.id;
-                    console.log('Connection ID: ' + peer.id);
-                });
-                peer.on('disconnected', function () {
-                    console.log('Connection lost. Please reconnect');
-                    // Workaround for peer.reconnect deleting previous id
-                    peer.id = lastPeerId;
-                    peer._lastServerId = lastPeerId;
-                    peer.reconnect();
-                });
-                peer.on('connection', function (c) {
-                    if (connections[c.peer]) {
-                        return;
-                    }
-                    connections[c.peer] = {player: c.options.metadata.playerIndex, connection: c};
-                    console.log("Connected to: " + c.peer);
-                    addMessage(c.options.metadata.playerIndex, "Connected");
-                    ready(c);
-                });
-
-                peer.on('close', function() {
-                    console.log('Connection destroyed');
-                });
-                peer.on('error', function (err) {
-                    console.log(err);
-                });
-                function ready(conn) {
-                    conn.on('data', function (data) {
-                        onKeyPad(data.playerId, data.controllerCode, data.isPressed === true ? 1 : 0);
-                    });
-                    conn.on('close', function () {
-                        start(true);
-                    });
                 }
-            })();
         </script>
         <script type="text/javascript" src="lib/game.js"></script>
         <script>window.onload = function(){nes_load_url("nes-canvas", "contra.nes");}</script>
@@ -104,13 +102,13 @@
     <body>
             <header>
               <h2>Hack 2019</h2>
-              <div id="receiver-id" style="font-weight: bold;" title="Copy this ID to the input on send.html."></div>
+              <div id="receiver-id" style="font-weight: bold;" ondblclick="refreshConnection()"></div>
             </header>
             
             <section>
                 <div class="player-panel left">
                     <h4>Player #1</h4>
-                    <div id="player-one-qrcode" class="player-qrcode"></div>
+                    <div id="player-one-qrcode" class="player-qrcode" ondblclick="loadPlayerController(this)"></div>
                     <div id="player-one-message" class="player-msg-panel">
                     </div>
                 </div>
@@ -120,7 +118,7 @@
                 </div>
                 <div class="player-panel right">
                     <h4>Player #2</h4>
-                    <div id="player-two-qrcode" class="player-qrcode"></div>
+                    <div id="player-two-qrcode" class="player-qrcode" ondblclick="loadPlayerController(this)"></div>
                     <div id="player-two-message" class="player-msg-panel">
                         
                     </div>
@@ -132,7 +130,6 @@
             </footer>
             <script>
                 init();
-                showQRCodeForPlayers();
             </script>
     </body>
 </html>
