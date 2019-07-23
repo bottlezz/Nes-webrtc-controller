@@ -2,6 +2,10 @@ body{
 	overflow: hidden;
 	margin:0px;
 	padding:0px;
+	background-image: url("background.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 
 .controlPanel
@@ -18,21 +22,41 @@ body{
     grid-row: 1;
 	border-color: #555555;
 	float:left;
-	
 	background-size: 100%;
 	position:relative;
-
 }
+
 .centerPanel {
 	grid-column: 2;
 }
 
+.cernterPanel .start
+{
+	width: 70%;
+	height:20px;
+	margin: 20 auto ;
+	background-image: url("Start.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+.cernterPanel .select
+{
+	width: 70%;
+	height:20px;
+	margin: auto;
+	background-image: url("Select.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
 .rightPanel {
 	grid-column: 3;
+	margin-left: auto;
 }
+
 .buttonBase{
 	width: 80%;
-	
 	margin: 0, auto;
 	background-image: url("aSBgImg.png");
 	background-size: cover;
@@ -50,6 +74,15 @@ body{
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;
+	font-style: italic;
+    text-align: right;
+    font-weight: bolder;
+}
+
+.buttonContainer{
+	position: fixed;
+    bottom: 0;
+    right: 0;
 }
 
 .rightPanel .button{

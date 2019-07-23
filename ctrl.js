@@ -30,7 +30,6 @@ function initialize() {
     } catch {
         playerNumber = 1;
     }
-    
 
     if(params){
         peerId = params.peerid;
@@ -52,7 +51,6 @@ function initialize() {
             }
         },1000)
     }
-
 
 	player = new Player(playerNumber);
     player.init();
@@ -88,8 +86,7 @@ function orientationChange(){
 };
 
 function handlePress(direction){
-    //top down left right
-
+    //direction = [top, down, left, right]
     callBack= player.sendCommand;
     //callBack= function(a,b) {console.log(a + " " + b);}
 
@@ -108,8 +105,7 @@ function handlePress(direction){
 }
 
 function handleRelease(direction){
-    //top down left right
-
+    //direction = [top, down, left, right]
     callBack= player.sendCommand;
     //callBack= function(a,b) {console.log(a + " " + b);}
     if(direction[0]){
