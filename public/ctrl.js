@@ -19,62 +19,57 @@ function getUrlParams () {
     });;
     return params;
 }
+
 function initialize() {
     var params = getUrlParams();
     var playerNumber = 1;
+    var peerId = undefined;
+
     try {
         playerNumber = parseInt(params.player);
     } catch {
         playerNumber = 1;
     }
+    
+
+    if(params){
+        peerId = params.peerid;
+    }
+
+    var windowWidth=$(window).width()>$(window).height()?$(window).width():$(window).height();
+    var windowHeight=$(window).width()<$(window).height()?$(window).width():$(window).height()
+    $("#controlPannel").width(windowWidth);
+    $("#controlPannel").height(windowHeight-20);
+    $("#join").click(join);
+    function join() {
+        var pid=$("#recvId").val();
+        console.log(pid);
+        player.join(pid);
+    }
+
 
 	player = new Player(playerNumber);
     player.init();
+    joyStick = new JoyStick("joyStick", function(){}, releaseAll, handlePress, handleRelease);
     controller = new Controller($(".select")[0], $(".start")[0], $(".buttonA")[0], $(".buttonB")[0]);
     controller.assign(player);
-    var pid = getPeerId();
-    if( pid){
-        player.join(pid);
+
+    if(peerId){
+        player.join(peerId);
     }
 };
-initialize();
 
-initControllers();
-orientationChange();
-/*
-if (window.MozWebSocket) {
-    console.log('using MozillaWebSocket');
-    window.WebSocket = window.MozWebSocket;
-} else if (!window.WebSocket) {
-   	socketSupport.style.display = "block";
-    //alert('browser does not support websockets!');
-    
-}
-*/
-var windowWidth=$(window).width()>$(window).height()?$(window).width():$(window).height();
-var windowHeight=$(window).width()<$(window).height()?$(window).width():$(window).height()
-$("#controlPannel").width(windowWidth);
-$("#controlPannel").height(windowHeight-20);
-var cPad1;
-var cPad2;
-
-function initControllers(){
-	cPad1= new ControlPad("ctrl1", touchOnCallBack, touchUpCallBack, handlePress, handleRelease);
-}
-
-$("#join").click(join);
-function join() {
-    var pid=$("#recvId").val();
-    console.log(pid);
-    player.join(pid);
-}
-
-function touchOnCallBack(x,y){
-
-}
-function touchUpCallBack(x,y){	
-    releaseAll();
-}
+$(document).ready(function(){
+    var mql = window.matchMedia("(orientation: portrait)");
+    if(mql.matches) {
+		// Portrait orientation
+		view_check.style.display = "block";
+	} else {
+		// Landscape orientation
+		view_check.style.display = "none";
+	}
+    initialize();
+})
 
 function orientationChange(){
 	var mql = window.matchMedia("(orientation: portrait)");
@@ -82,35 +77,18 @@ function orientationChange(){
 		// Portrait orientation
 		view_check.style.display = "block";
 	} else {
-		// Landscape orientation
-		view_check.style.display = "none";
-		initControllers();
+		location.reload();
 	}
 };
-
-function getPressAndRelease(newDirection, currentDirection) {
-    var press = [0,0,0,0];
-    var release = [0,0,0,0];
-    for(let i = 0; i < 4 ; i++){
-        if(newDirection[i]==1 && currentDirection[i]==0){
-            press[i] = 1;
-        }
-        if(newDirection[i]==0 && currentDirection[i]==1){
-            release[i] = 1;
-        }
-    }
-    return {press, release};
-}
 
 function handlePress(direction){
     //top down left right
 
     callBack= player.sendCommand;
-    callBack= function(a,b) {console.log(a + " " + b);}
+    //callBack= function(a,b) {console.log(a + " " + b);}
 
     if(direction[0]){
         callBack(Controller.KeyCode.UP, false);
-        //console.log(direction);
     }
     if(direction[1]){
 		callBack(Controller.KeyCode.DOWN, false);
@@ -127,10 +105,9 @@ function handleRelease(direction){
     //top down left right
 
     callBack= player.sendCommand;
-    callBack= function(a,b) {console.log(a + " " + b);}
+    //callBack= function(a,b) {console.log(a + " " + b);}
     if(direction[0]){
         callBack(Controller.KeyCode.UP,true);
-        //console.log(direction);
     }
     if(direction[1]){
 		callBack(Controller.KeyCode.DOWN, true);
@@ -146,7 +123,7 @@ function handleRelease(direction){
 function releaseAll()
 {
     callBack= player.sendCommand;
-    callBack= function(a,b) {console.log(a + " " + b);}
+    //callBack= function(a,b) {console.log(a + " " + b);}
     callBack(Controller.KeyCode.RELEASE, true);
 }
 
