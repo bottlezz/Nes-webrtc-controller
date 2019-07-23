@@ -3,67 +3,136 @@
     <head>
         <title>Example</title>
         <script src="https://unpkg.com/peerjs@1.0.0/dist/peerjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
         <script type="text/javascript" src="lib/controller.js"></script>
+        <link rel="stylesheet" href="./css/game.css">
         <script>
-            var peer = null; // own peer object
-            var conn = null;
-            var connections = {};
-            peer = new Peer(null, {
-                debug: 2
-            });
-            peer.on('open', function (id) {
-                // Workaround for peer.reconnect deleting previous id
-                if (peer.id === null) {
-                    console.log('Received null id from peer open');
-                }
-                var connectionId = document.getElementById("receiver-id");
-                connectionId.innerHTML = "Connection ID: " + peer.id;
-                console.log('Connection ID: ' + peer.id);
-            });
-            peer.on('disconnected', function () {
-                console.log('Connection lost. Please reconnect');
-                // Workaround for peer.reconnect deleting previous id
-                peer.id = lastPeerId;
-                peer._lastServerId = lastPeerId;
-                peer.reconnect();
-            });
-            peer.on('connection', function (c) {
-                if (connections[c.peer]) {
-                    return;
-                }
-                connections[c.peer] = c;
-                console.log("Connected to: " + c.peer);
-                status.innerHTML = "Connected"
-                ready(connections[c.peer]);
-            });
+                var player1Msg;
+                var player2Msg;
 
-            peer.on('close', function() {
-                conn = null;
-                console.log('Connection destroyed');
-            });
-            peer.on('error', function (err) {
-                console.log(err);
-            });
-            function ready(conn) {
-                conn.on('data', function (data) {
-                    onKeyPad(data.playerId, data.controllerCode, data.isPressed === true ? 1 : 0);
+                function init() {
+                    player1Msg = document.getElementById("player-one-message");
+                    player2Msg = document.getElementById("player-two-message");
+                }
+                function showQRCodeForPlayers() {
+                    var playerurl = location.origin + "/controller.html?";
+                    var playerOneQRcode = new QRCode("player-one-qrcode");
+                    var playerTwoQRcode = new QRCode("player-two-qrcode");
+                    playerOneQRcode.makeCode(playerurl+"player=1");
+                    playerTwoQRcode.makeCode(playerurl+"player=2");
+                }
+                function addMessage(player, msg) {
+                    var panel = null;
+                    if (player) {
+                        panel = player === 1 ? player1Msg : player2Msg;
+                    }
+                    if (panel) {
+                        var now = new Date();
+                        var h = now.getHours();
+                        var m = addZero(now.getMinutes());
+                        var s = addZero(now.getSeconds());
+                        if (h > 12)
+                            h -= 12;
+                        else if (h === 0)
+                            h = 12;
+                        function addZero(t) {
+                            if (t < 10)
+                                t = "0" + t;
+                            return t;
+                        };
+                        panel.innerHTML = "<br><span class=\"msg-time\">" + h + ":" + m + ":" + s + "</span>  -  " + msg + panel.innerHTML;
+                    }
+                }
+            </script>
+        <script>
+            (function () {
+
+                var peer = null; // own peer object
+                var conn = null;
+                var connections = {};
+                peer = new Peer(null, {
+                    debug: 2
                 });
-                conn.on('close', function () {
-                    status.innerHTML = "Connection reset<br>Awaiting connection...";
-                    conn = null;
-                    start(true);
+                peer.on('open', function (id) {
+                    // Workaround for peer.reconnect deleting previous id
+                    if (peer.id === null) {
+                        console.log('Received null id from peer open');
+                    }
+                    var connectionId = document.getElementById("receiver-id");
+                    connectionId.innerHTML = "Connection ID: " + peer.id;
+                    console.log('Connection ID: ' + peer.id);
                 });
-            }
+                peer.on('disconnected', function () {
+                    console.log('Connection lost. Please reconnect');
+                    // Workaround for peer.reconnect deleting previous id
+                    peer.id = lastPeerId;
+                    peer._lastServerId = lastPeerId;
+                    peer.reconnect();
+                });
+                peer.on('connection', function (c) {
+                    if (connections[c.peer]) {
+                        return;
+                    }
+                    connections[c.peer] = {player: c.options.metadata.playerIndex, connection: c};
+                    console.log("Connected to: " + c.peer);
+                    addMessage(c.options.metadata.playerIndex, "Connected");
+                    ready(c);
+                });
+
+                peer.on('close', function() {
+                    console.log('Connection destroyed');
+                });
+                peer.on('error', function (err) {
+                    console.log(err);
+                });
+                function ready(conn) {
+                    conn.on('data', function (data) {
+                        onKeyPad(data.playerId, data.controllerCode, data.isPressed === true ? 1 : 0);
+                    });
+                    conn.on('close', function () {
+                        start(true);
+                    });
+                }
+            })();
         </script>
         <script type="text/javascript" src="lib/jsnes.js"></script>
         <script type="text/javascript" src="lib/game.js"></script>
         <script>window.onload = function(){nes_load_url("nes-canvas", "contra.nes");}</script>
+
     </head>
     <body>
-        <div style="margin: auto; width: 75%;">
-			<canvas id="nes-canvas" width="256" height="240" style="width: 80%"/>
-        </div>
-        <div id="receiver-id" style="font-weight: bold;" title="Copy this ID to the input on send.html."></div>
-		<p>DPad: Arrow keys<br/>Start: Return, Select: Tab<br/>A Button: A, B Button: S</p>
+            <header>
+              <h2>Hack 2019</h2>
+              <div id="receiver-id" style="font-weight: bold;" title="Copy this ID to the input on send.html."></div>
+            </header>
+            
+            <section>
+                <div class="player-panel left">
+                    <h4>Player #1</h4>
+                    <div id="player-one-qrcode" class="player-qrcode"></div>
+                    <div id="player-one-message" class="player-msg-panel">
+                    </div>
+                </div>
+                <div class="center">
+                        
+                    <canvas id="nes-canvas" width="256" height="240"></canvas>
+                </div>
+                <div class="player-panel right">
+                    <h4>Player #2</h4>
+                    <div id="player-two-qrcode" class="player-qrcode"></div>
+                    <div id="player-two-message" class="player-msg-panel">
+                        
+                    </div>
+                </div>
+            </section>
+            
+            <footer>
+              <p>By <a href="mailto:a-chzhou@microsoft.com">Gregory Zhou</a> & <a href="mailto:alwo@microsoft.com">Alan Wong</a></p>
+            </footer>
+            <script>
+                init();
+                showQRCodeForPlayers();
+            </script>
     </body>
 </html>
