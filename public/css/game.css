@@ -59,7 +59,10 @@ section:after {
     display: table;
     clear: both;
 }
-  
+
+.player-qrcode {
+    height: 100px;
+}
 .player-qrcode img {
     width: 100px;
     height: 100px;
