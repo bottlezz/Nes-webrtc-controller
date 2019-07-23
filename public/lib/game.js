@@ -98,7 +98,13 @@ function onKeyPad(palyerId, key, upDown){
         case 7:
             keycode = jsnes.Controller.BUTTON_SELECT; break;
         case 8:
-            keycode = jsnes.Controller.BUTTON_START; break;
+			keycode = jsnes.Controller.BUTTON_START; break;
+		case 9:
+			nes.buttonUp(palyerId,jsnes.Controller.BUTTON_DOWN);
+			nes.buttonUp(palyerId,jsnes.Controller.BUTTON_LEFT);
+			nes.buttonUp(palyerId,jsnes.Controller.BUTTON_RIGHT);
+			nes.buttonUp(palyerId,jsnes.Controller.BUTTON_UP);
+			return;
         default:
             break;
     }

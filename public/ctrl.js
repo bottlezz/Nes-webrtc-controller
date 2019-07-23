@@ -231,7 +231,7 @@ function getPressAndRelease(newDirection, currentDirection) {
             press[i] = 1;
         }
         if(newDirection[i]==0 && currentDirection[i]==1){
-            release[i] = 0;
+            release[i] = 1;
         }
     }
     return {press, release};
@@ -275,10 +275,7 @@ function handleRelease(direction, callBack){
 
 function releaseAll(callBack)
 {
-    callBack(Controller.KeyCode.RIGHT, true);
-    callBack(Controller.KeyCode.LEFT, true);
-    callBack(Controller.KeyCode.DOWN, true);
-    callBack(Controller.KeyCode.UP,true);
+    callBack(Controller.KeyCode.RELEASE, true);
     currentDirection=[0,0,0,0];
 }
 
