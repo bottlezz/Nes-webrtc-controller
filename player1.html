@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width">
+        <title>Peer-to-Peer Cue System --- Sender</title>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+        <h1>Peer-to-Peer Cue System --- Sender</h1>
+
+        <table class="control">
+            <tr>
+                <td class="title">Status:</td>
+                <td class="title">Messages:</td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">ID: </span>
+                    <input type="text" id="receiver-id" title="Input the ID from receive.html">
+                    <button id="connect-button">Connect</button>
+                </td>
+            </tr>
+            <tr>
+                <td><div id="status" class="status"></div></td>
+                <td><div class="message" id="message"></div></td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="control-button" id="resetButton">RIGHT</button>
+                </td>
+                <td>
+                    <button type="button" class="control-button" id="goButton">UP</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="control-button" id="fadeButton">DOWN</button>
+                </td>
+                <td>
+                    <button type="button" class="control-button" id="offButton">LEFT</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="control-button" id="selectButton">SELECT</button>
+                </td>
+                <td>
+                    <button type="button" class="control-button" id="AButton">A</button>
+                </td>
+            </tr>
+        </table>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script>
+        <script src="lib/player.js"></script>
+        <script src="lib/controller.js"></script>
+        <script type="text/javascript">
+            (function () {
+                var player = null;
+                var recvIdInput = document.getElementById("receiver-id");
+                var status = document.getElementById("status");
+                var message = document.getElementById("message");
+                var goButton = document.getElementById("goButton");
+                var selectButton = document.getElementById("selectButton");
+                var resetButton = document.getElementById("resetButton");
+                var fadeButton = document.getElementById("fadeButton");
+                var offButton = document.getElementById("offButton");
+                var sendMessageBox = document.getElementById("sendMessageBox");
+                var sendButton = document.getElementById("sendButton");
+                var clearMsgsButton = document.getElementById("clearMsgsButton");
+                var connectButton = document.getElementById("connect-button");
+                var cueString = "<span class=\"cueMsg\">Cue: </span>";
+                /**
+                 * Create the Peer object for our end of the connection.
+                 *
+                 * Sets up callbacks that handle any events related to our
+                 * peer object.
+                 */
+                function initialize() {
+                    player = new Player(1);
+                    player.init();
+                    window.player = player;
+                };
+                function join() {
+                    player.join(recvIdInput.value);
+                }
+                goButton.onclick = function () {
+                    player.sendCommand(Controller.KeyCode.UP, true);
+                };
+                resetButton.onclick = function () {
+                    player.sendCommand(Controller.KeyCode.RIGHT, true);
+                };
+                fadeButton.onclick = function () {
+                    player.sendCommand(Controller.KeyCode.DOWN, true);                  
+                };
+                offButton.onclick = function () {
+                    player.sendCommand(Controller.KeyCode.LEFT, true);   
+                };
+                selectButton.onclick = function () {
+                    player.sendCommand(Controller.KeyCode.SELECT, false);
+                    setTimeout(function(){ player.sendCommand(Controller.KeyCode.SELECT, true);}, 500);
+                };
+
+                // Start peer connection on click
+                connectButton.addEventListener('click', join);
+
+                // document.onkeydown = function (e) {
+                //     if (player && e.code === "KeyA") {
+                //     console.log("Down: " + e.code);
+                //     player.sendCommand(Controller.KeyCode.SELECT, true);
+                //     }
+                // }
+                // document.onkeyup = function (e) {
+                //     if (player && e.code === "KeyA") {
+                //     console.log("Up: " + e.code);
+                //     player.sendCommand(Controller.KeyCode.SELECT, false);
+                //     }
+                // }
+                // Since all our callbacks are setup, start the process of obtaining an ID
+                initialize();
+            })();
+        </script>
+    </body>
+</html>

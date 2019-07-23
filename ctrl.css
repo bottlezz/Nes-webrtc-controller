@@ -1,0 +1,85 @@
+body{
+	overflow: hidden;
+	margin:0px;
+	padding:0px;
+}
+.ctrlPad{
+	margin:5px;
+	width: 48%;
+	height: 200px;
+	border: 3px solid;
+	border-color: #555555;
+}
+
+.ctrlPadl {
+	margin:0px;
+	width: 48%;
+	height: 90%;
+	border: 0px solid;
+	border-color: #555555;
+	float:left;
+	
+	background-size: 100%;
+	position:relative;
+
+}
+.ctrlPadr {
+	margin:0px;
+
+	width: 48%;
+
+	height: 90%;
+	border: 1px solid;
+	border-color: #555555;
+	float:right;
+	position:relative;
+
+}
+.buttonBase{
+	width: 75%;
+	
+	margin: 0, auto;
+	background-image: url("aSBgImg.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	position:absolute; 
+	bottom:0;
+}
+.buttonBase-right{
+	right:0;
+}
+.analogStick{
+	width: 30%;
+	position: relative;
+}
+
+.button{
+	background-image: url("aSThumbImg.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.ctrlPadr .button{
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    display: inline-block;
+}
+
+
+.screen{
+	position: absolute;
+	
+}
+#view_OrientationCheck{
+	padding:0px;
+	margin:0px;
+	width:100%;
+	height:100%;
+	display:block;
+	position:absolute;
+	z-index:1000;
+	background-color:#aaaaaa;
+}
