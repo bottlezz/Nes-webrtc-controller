@@ -25,7 +25,7 @@ function ControlPad(id,callBack,endCallBack){
   
     pad.addEventListener('touchend', function(event) {
       event.preventDefault();
-  
+      console.log("end");
       endCallBack(self.x,self.y);
     }, false);
   
