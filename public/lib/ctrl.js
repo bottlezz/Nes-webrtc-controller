@@ -16,6 +16,16 @@ function getUrlParams () {
     return params;
 }
 
+function joinGame(pid, player) {
+    console.log(pid);
+    player.join(pid, function() {
+        $("#status").text("Connected");
+    }, function() {
+        $("#status").text("Disconnected");
+    });
+}
+
+
 function initialize() {
     var params = getUrlParams();
     var playerNumber = 1;
@@ -35,18 +45,13 @@ function initialize() {
     var windowHeight=$(window).width()<$(window).height()?$(window).width():$(window).height()
     $("#controlPannel").width(windowWidth);
     $("#controlPannel").height(windowHeight-20);
-    $("#join").click(join);
-    function join() {
-        var pid=$("#recvId").val();
-        console.log(pid);
-        player.join(pid);
-        setTimeout(function(){
-            if(player.isConnected()){
-                $("#status").text("Connected");
-                
-            }
-        },1000)
-    }
+    $("#join").click(
+        function () {
+            var pid=$("#recvId").val();
+            joinGame(pid, player);
+            console.log(pid);
+        }
+    );
 
 	player = new Player(playerNumber);
     player.init();
@@ -55,7 +60,7 @@ function initialize() {
     controller.assign(player);
 
     if(peerId){
-        player.join(peerId);
+        joinGame(peerId, player);
     }
 };
 

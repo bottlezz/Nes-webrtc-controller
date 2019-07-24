@@ -42,7 +42,7 @@ function Player (id) {
      * Sets up callbacks that handle any events related to the
      * connection and data received on it.
      */
-    function join(connectionId) {
+    function join(connectionId, connectedCallback, closeCallback) {
         // Close old connection
         if (conn) {
             conn.close();
@@ -53,10 +53,9 @@ function Player (id) {
         });
         conn.on('open', function () {
             log("Connected");
-            // Check URL params for comamnds that should be sent immediately
-            var command = getUrlParam("command");
-            if (command)
-                conn.send(command);
+            if (connectedCallback) {
+                connectedCallback(id);
+            }
         });
         // Handle incoming data (messages only since this is the signal sender)
         conn.on('data', function (data) {
@@ -64,6 +63,9 @@ function Player (id) {
         });
         conn.on('close', function () {
             log("Disconnected");
+            if (closeCallback) {
+                closeCallback(id);
+            }
         });
     };
     

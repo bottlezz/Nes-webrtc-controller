@@ -19,7 +19,7 @@
                     player2Msg = document.getElementById("player-two-message");
                     player1QR = document.getElementById("player-one-qrcode");
                     player2QR = document.getElementById("player-two-qrcode");
-                    host = new Host(onConnectionOpen, onConnectionReady);
+                    host = new Host(onConnectionOpen, onConnectionReady, onCloseConnection);
                     host.start();
 
                     var pathArray = location.pathname.split('/');
@@ -62,6 +62,9 @@
                             // start(true);
                         });
                     }
+                }
+                function onCloseConnection(controllerIndex, connId) {
+                    addMessage(controllerIndex, "Disconnected");
                 }
                 function showQRCodeForPlayers(connId) {
                     if (connId) {
