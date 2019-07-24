@@ -42,7 +42,7 @@ function Player (id) {
      * Sets up callbacks that handle any events related to the
      * connection and data received on it.
      */
-    function join(connectionId, connectedCallback, closeCallback) {
+    function join(connectionId, connectedCallback, closeCallback, errCallback) {
         // Close old connection
         if (conn) {
             conn.close();
@@ -65,6 +65,12 @@ function Player (id) {
             log("Disconnected");
             if (closeCallback) {
                 closeCallback(id);
+            }
+        });
+        conn.on('error', function (err) {
+            log("Oops! " + err);
+            if (errCallback) {
+                errCallback(err);
             }
         });
     };

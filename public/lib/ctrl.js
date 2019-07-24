@@ -22,6 +22,8 @@ function joinGame(pid, player) {
         $("#status").text("Connected");
     }, function() {
         $("#status").text("Disconnected");
+    }, function (err) {
+        $("#status").text(err);
     });
 }
 
