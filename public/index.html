@@ -10,6 +10,7 @@
         <script type="text/javascript" src="lib/host.js"></script>
         <link rel="stylesheet" href="./css/game.css">
         <script>
+                var screenFactor = 0.8356;
                 var receiverId, player1Msg, player2Msg, player1QR, player2QR;
                 var hostUrlBase;
                 var peer = null;
@@ -34,6 +35,8 @@
                         paths = paths.substring(0, paths.length - 1);  - 1; // remove last slash
                     }
                     hostUrlBase = location.origin + paths;
+
+                    $(".center").css("width", (window.innerHeight * screenFactor) + "px");
                 }
                 function refreshConnection() {
                     if (host) {
@@ -102,12 +105,15 @@
                         window.open(elmt.title, '_blank');
                     }
                 }
+                function resizecanvas() {
+                    $(".center").css("width", (window.innerHeight * screenFactor) + "px");
+                }
         </script>
         <script type="text/javascript" src="lib/game.js"></script>
         <script>window.onload = function(){nes_load_url("nes-canvas", "contra.nes");}</script>
 
     </head>
-    <body>
+    <body onresize="resizecanvas()">
             <header>
               <h2>Hack 2019</h2>
               <div id="receiver-id" style="font-weight: bold;" ondblclick="refreshConnection()"></div>

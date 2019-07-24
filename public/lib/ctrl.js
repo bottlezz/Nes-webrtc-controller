@@ -35,7 +35,7 @@ function initialize() {
 
     try {
         playerNumber = parseInt(params.player);
-    } catch {
+    } catch (e) {
         playerNumber = 1;
     }
 
