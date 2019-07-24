@@ -110,7 +110,28 @@
                 }
         </script>
         <script type="text/javascript" src="lib/game.js"></script>
-        <script>window.onload = function(){nes_load_url("nes-canvas", "contra.nes");}</script>
+        <script>
+            function getUrlParams () {
+                var params = {};
+                var tmp = [];
+                window.location.search.substr(1).split("&").forEach(function (item) {
+                    tmp = item.split("=");
+                    if (tmp.length > 1) {
+                        params[tmp[0]] = decodeURIComponent(tmp[1]);
+                    }
+                });;
+                return params;
+            }
+            window.onload = function(){
+                var params = getUrlParams();
+                if (params && params.rom && params.rom!=""){
+                    nes_load_url("nes-canvas", params.rom+".nes");                    
+                }else{
+                    nes_load_url("nes-canvas", "contra.nes");
+                }
+                
+            }
+        </script>
 
     </head>
     <body onresize="resizecanvas()">
