@@ -93,45 +93,45 @@ function JoyStick(id,touchStartcallBack,touchEndCallBack, handlePress, handleRel
         handleRelease(directionChange.release);	
     }
     let rot = currentRot;
-    if((rot<=-30 && rot>=-27) || (rot>=27 && rot <=30) && currentDirection!=directionList[0]){
+    if((rot<=-30 && rot>=-26) || (rot>=26 && rot <=30) && currentDirection!=directionList[0]){
         //up
-        console.log("up");
+        //console.log("up");
         updateAndSend(directionList[0]);
-    }else if(rot>=19 && rot <=26 && currentDirection!=directionList[1]){
+    }else if(rot>=20 && rot <=25 && currentDirection!=directionList[1]){
         //up right
         updateAndSend(directionList[1]);
-        console.log("up right");
+        //console.log("up right");
 
-    }else if(rot>= 12 && rot <=18 && currentDirection!=directionList[2]){
+    }else if(rot>= 11 && rot <=19 && currentDirection!=directionList[2]){
         //right
         updateAndSend(directionList[2]);
-        console.log("right");
+       // console.log("right");
 
-    }else if(rot>= 4 && rot<=11 && currentDirection!=directionList[3]){
+    }else if(rot>= 5 && rot<=10 && currentDirection!=directionList[3]){
         //right down
         updateAndSend(directionList[3]);
-        console.log("right down");
+        //console.log("right down");
 
-    }else if((rot>=-3 && rot<=3) && currentDirection!=directionList[4]){
+    }else if((rot>=-4 && rot<=4) && currentDirection!=directionList[4]){
         //down
         
         updateAndSend(directionList[4]);
-        console.log("down");
+        //console.log("down");
 
-    }else if((rot<=-4 && rot>=-11) && currentDirection!=directionList[5]){
+    }else if((rot<=-4 && rot>=-10) && currentDirection!=directionList[5]){
         //left down;
         updateAndSend(directionList[5]);
-        console.log("left down");
+        //console.log("left down");
 
-    }else if(rot<=-12&& rot>=-18 && currentDirection!=directionList[6]){
+    }else if(rot<=-11&& rot>=-19 && currentDirection!=directionList[6]){
         //left
         updateAndSend(directionList[6]);
-        console.log("left");
+        //console.log("left");
 
-    }else if(rot<=-19 && rot>=-26 && currentDirection!=directionList[7]){
+    }else if(rot<=-20 && rot>=-25 && currentDirection!=directionList[7]){
         // left up
         updateAndSend(directionList[7]);
-        console.log("left up");
+        //console.log("left up");
 
     }else{
         //releaseAll(player.sendCommand);
