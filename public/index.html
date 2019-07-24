@@ -30,6 +30,9 @@
                         }
                     }
                     var paths = pathArray.join('/');
+                    if (paths.length > 0 && paths[paths.length - 1] === '/') {
+                        paths = paths.substring(0, paths.length - 1);  - 1; // remove last slash
+                    }
                     hostUrlBase = location.origin + paths;
                 }
                 function refreshConnection() {
@@ -62,7 +65,7 @@
                 }
                 function showQRCodeForPlayers(connId) {
                     if (connId) {
-                        var playerurl = (hostUrlBase + "/controller.html?peerid="+connId+"&").replace(/\/\/+/g, '/');
+                        var playerurl = hostUrlBase + "/controller.html?peerid="+connId+"&";
                         var playerOneQRcode = new QRCode("player-one-qrcode");
                         var playerTwoQRcode = new QRCode("player-two-qrcode");
                         playerOneQRcode.makeCode(playerurl+"player=1");
